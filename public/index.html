@@ -50,7 +50,6 @@
             });
 
             socket.on("updatedCells", (cells) => {
-                console.log(cells);
                 cells.forEach((cell) => {
                     board[cell.row * 9 + cell.col] = cell.val;
                 });
@@ -58,9 +57,12 @@
                 $("#board").val(json);
             });
 
-            socket.on("submissionResult", ({ verdict, time, penalty }) => {
-                alert(verdict + "\n" + time + "\n" + penalty);
+            socket.on("submissionResult", (res) => {
+                res = JSON.stringify(res, undefined, 4);
+                alert(res);
             });
+
+            socket.on("errorOccurred", (err) => alert("Error: " + err));
         </script>
         <style></style>
     </body>
