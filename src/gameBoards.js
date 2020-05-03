@@ -1,12 +1,18 @@
 const uuid = require("uuid").v4;
-const sudoku = require("./sudoku");
-
+const randomSudoku = require("./randomSudoku");
 const boards = {};
 const playerBoardMap = {};
 
 function createBoard() {
     const boardName = uuid();
-    const board = sudoku.getNewPuzzleAndSolution();
+    let solution = [];
+    let puzzle = [];
+    const potato = randomSudoku.makePuzzle();
+    const tomato = randomSudoku.pluck(potato, 25).puzzle;
+    potato.forEach(arr => { solution = [...solution, ...arr]; } );
+    tomato.forEach(arr => { puzzle = [...puzzle, ...arr]; } );
+    const board = { puzzle, solution };
+    console.log(board);
     const startTime = new Date().getTime() / 1000;
     boards[boardName] = {
         board,
