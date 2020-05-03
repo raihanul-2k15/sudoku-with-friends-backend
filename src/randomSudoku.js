@@ -78,6 +78,7 @@ function canBeA(puzzle, i, j, c) {
  * @param b
  * @returns {boolean}
  */
+// eslint-disable-next-line no-unused-vars
 function isPeer(a, b) {
     if (!a || !b) return false;
     const squareA = ((Math.floor(a.x / 3)) * 3) + Math.floor(a.y / 3);
