@@ -1,12 +1,14 @@
 const uuid = require("uuid").v4;
-const sudoku = require("./sudoku");
-
+import * as randomSudoku from "./randomSudoku.js";
 const boards = {};
 const playerBoardMap = {};
 
 function createBoard() {
     const boardName = uuid();
-    const board = sudoku.getNewPuzzleAndSolution();
+    const solution = randomSudoku.makePuzzle();
+    const puzzle = randomSudoku.pluck(solution, 25);
+    const board = JSON.parse({ puzzle, solution });
+
     const startTime = new Date().getTime() / 1000;
     boards[boardName] = {
         board,
