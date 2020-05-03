@@ -3,12 +3,12 @@ function randomChoice(choices) {
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
-export function range(n) {
+function range(n) {
     return Array.from(Array(n).keys());
 }
 
 // TODO use immutable when this is all working
-export function makePuzzle() {
+function makePuzzle() {
     // eslint-disable-next-line no-constant-condition
     while (true) {
         try {
@@ -78,14 +78,14 @@ function canBeA(puzzle, i, j, c) {
  * @param b
  * @returns {boolean}
  */
-export function isPeer(a, b) {
+function isPeer(a, b) {
     if (!a || !b) return false;
     const squareA = ((Math.floor(a.x / 3)) * 3) + Math.floor(a.y / 3);
     const squareB = ((Math.floor(b.x / 3)) * 3) + Math.floor(b.y / 3);
     return a.x === b.x || a.y === b.y || squareA === squareB;
 }
 
-export function pluck(allCells, n = 0) {
+function pluck(allCells, n = 0) {
     const puzzle = JSON.parse(JSON.stringify(allCells));
     /**
        * starts with a set of all 81 cells, and tries to remove one (randomly) at a time,
@@ -143,3 +143,8 @@ export function pluck(allCells, n = 0) {
     }
     return { puzzle, size: cells.size };
 }
+
+module.exports = {
+    makePuzzle,
+    pluck
+};
