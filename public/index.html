@@ -21,7 +21,7 @@
             for (let i = 0; i < 81; i++) {
                 board.push(0);
             }
-            const socket = io.connect("http://127.0.0.1:3000");
+            const socket = io.connect("/");
             socket.on("connect", function (data) {
                 console.log("Connected to server!");
             });
