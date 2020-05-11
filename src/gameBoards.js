@@ -11,8 +11,14 @@ function createBoard() {
     const puzzle2D = randomSudoku.pluck(solution2D, 25).puzzle;
     const solution = [].concat(...solution2D);
     const puzzle = [].concat(...puzzle2D);
+    let uneditable = [];
+    puzzle.forEach((val, index) => {
+        if (val === 0) {
+            uneditable.push(index);
+        }
+    });
 
-    const board = { puzzle, solution };
+    const board = { puzzle, solution, uneditable };
     const startTime = new Date().getTime() / 1000;
     boards[boardName] = {
         board,
@@ -28,6 +34,16 @@ function boardOfPlayer(player) {
 
 function boardExists(boardName) {
     return boardName in boards;
+}
+
+function getUneditableCells(boardName) {
+    console.log(boards);
+    if (boardExists(boardName)) {
+        console.log("Dhukse");
+        return boards[boardName].board.uneditable;
+    } else {
+        throw "Can't get uneditable cells of non existent board.";
+    }
 }
 
 function addPlayerToBoard(player, boardName) {
@@ -99,4 +115,5 @@ module.exports = {
     updateCellOfBoard,
     getCellOfBoard,
     makeSubmission,
+    getUneditableCells,
 };

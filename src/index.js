@@ -96,5 +96,19 @@ io.on("connection", function (player) {
     });
 });
 
+app.get("/status/:boardName", (req, res) => {
+    console.log(req.params);
+    try {
+        const uneditableCells = store.getUneditableCells(req.params.boardName);
+        const uneditableRowCol = uneditableCells.map((idx) => ({
+            row: Math.floor(idx / 9),
+            col: idx % 9,
+        }));
+        res.json({ uneditableRowCol });
+    } catch (err) {
+        res.status(418).send(err);
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log("Server started on port " + PORT));
