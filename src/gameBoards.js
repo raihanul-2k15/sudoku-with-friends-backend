@@ -8,12 +8,12 @@ function createBoard() {
     const boardName = uuid();
 
     const solution2D = randomSudoku.makePuzzle();
-    const puzzle2D = randomSudoku.pluck(solution2D, 25).puzzle;
+    const puzzle2D = randomSudoku.pluck(solution2D, 30).puzzle;
     const solution = [].concat(...solution2D);
     const puzzle = [].concat(...puzzle2D);
     let uneditable = [];
     puzzle.forEach((val, index) => {
-        if (val === 0) {
+        if (val !== 0) {
             uneditable.push(index);
         }
     });

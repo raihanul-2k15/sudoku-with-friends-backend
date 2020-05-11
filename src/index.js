@@ -104,7 +104,7 @@ app.get("/status/:boardName", (req, res) => {
             row: Math.floor(idx / 9),
             col: idx % 9,
         }));
-        res.json({ uneditableRowCol });
+        res.json({ uneditable: uneditableRowCol });
     } catch (err) {
         res.status(418).send(err);
     }
