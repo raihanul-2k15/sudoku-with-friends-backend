@@ -81,7 +81,7 @@ io.on("connection", function (player) {
         const boardName = store.boardOfPlayer(player);
         if (boardName !== undefined) {
             const res = store.makeSubmission(boardName);
-            player.emit("submissionResult", res);
+            io.to(boardName).emit("submissionResult", res);
         } else {
             player.emit(
                 "errorOccurred",
@@ -97,14 +97,15 @@ io.on("connection", function (player) {
 });
 
 app.get("/status/:boardName", (req, res) => {
-    console.log(req.params);
+    const boardName = req.params.boardName;
     try {
-        const uneditableCells = store.getUneditableCells(req.params.boardName);
-        const uneditableRowCol = uneditableCells.map((idx) => ({
+        const uneditable = store.getUneditableCells(boardName).map((idx) => ({
             row: Math.floor(idx / 9),
             col: idx % 9,
         }));
-        res.json({ uneditable: uneditableRowCol });
+        const time = store.getElapsedTime(boardName);
+        const penalty = store.getPenalty(boardName);
+        res.json({ uneditable, time, penalty });
     } catch (err) {
         res.status(418).send(err);
     }

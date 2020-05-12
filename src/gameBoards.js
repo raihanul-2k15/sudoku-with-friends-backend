@@ -36,16 +36,6 @@ function boardExists(boardName) {
     return boardName in boards;
 }
 
-function getUneditableCells(boardName) {
-    console.log(boards);
-    if (boardExists(boardName)) {
-        console.log("Dhukse");
-        return boards[boardName].board.uneditable;
-    } else {
-        throw "Can't get uneditable cells of non existent board.";
-    }
-}
-
 function addPlayerToBoard(player, boardName) {
     if (boardExists(boardName)) {
         playerBoardMap[player.id] = boardName;
@@ -99,10 +89,35 @@ function makeSubmission(boardName) {
         if (verdict === false) {
             boards[boardName].penalty += 1;
         }
-        const time = new Date().getTime() / 1000 - startTime;
+        const time = getElapsedTime(boardName);
         return { verdict, time, penalty: boards[boardName].penalty };
     } else {
         throw "Can't make submission of non-existent board.";
+    }
+}
+
+function getUneditableCells(boardName) {
+    if (boardExists(boardName)) {
+        return boards[boardName].board.uneditable;
+    } else {
+        throw "Can't get uneditable cells of non existent board.";
+    }
+}
+
+function getElapsedTime(boardName) {
+    if (boardExists(boardName)) {
+        const { startTime } = boards[boardName];
+        return Math.round(new Date().getTime() / 1000 - startTime);
+    } else {
+        throw "Can't get elapsed time of non existent board.";
+    }
+}
+
+function getPenalty(boardName) {
+    if (boardExists(boardName)) {
+        return boards[boardName].penalty;
+    } else {
+        throw "Can't get elapsed time of non existent board.";
     }
 }
 
@@ -116,4 +131,6 @@ module.exports = {
     getCellOfBoard,
     makeSubmission,
     getUneditableCells,
+    getElapsedTime,
+    getPenalty,
 };
