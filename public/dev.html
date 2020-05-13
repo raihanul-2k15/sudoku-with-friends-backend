@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+        <button id="create-channel">Create and Join</button><br />
+        <input type="text" id="channel-name" />
+        <button id="join-channel">Join Channel</button><br />
+        <input type="text" id="row" /><br />
+        <input type="text" id="col" /><br />
+        <input type="text" id="val" /><br />
+        <button id="update-cell">Update Cell</button><br />
+        <textarea rows="11" cols="50" id="board"></textarea><br />
+        <button id="submit">Submit</button>
+
+        <script src="./socket.io.js"></script>
+        <script>
+            const board = [];
+            for (let i = 0; i < 81; i++) {
+                board.push(0);
+            }
+            const socket = io.connect("/");
+            socket.on("connect", function (data) {
+                console.log("Connected to server!");
+            });
+
+            $("#create-channel").click(() => {
+                socket.emit("createBoard");
+            });
+
+            $("#join-channel").click(() => {
+                socket.emit("joinBoard", $("#channel-name").val());
+            });
+
+            $("#update-cell").click(() => {
+                const row = $("#row").val();
+                const col = $("#col").val();
+                const val = $("#val").val();
+                socket.emit("updateCell", { row, col, val });
+            });
+
+            $("#submit").click(() => {
+                socket.emit("submitBoard");
+            });
+
+            socket.on("joinedBoard", (channelName) => {
+                $("#channel-name").val(channelName);
+            });
+
+            socket.on("updatedCells", (cells) => {
+                cells.forEach((cell) => {
+                    board[cell.row * 9 + cell.col] = cell.val;
+                });
+                const json = JSON.stringify(board, undefined, 4);
+                $("#board").val(json);
+            });
+
+            socket.on("submissionResult", (res) => {
+                res = JSON.stringify(res, undefined, 4);
+                alert(res);
+            });
+
+            socket.on("errorOccurred", (err) => alert("Error: " + err));
+        </script>
+        <style></style>
+    </body>
+</html>
