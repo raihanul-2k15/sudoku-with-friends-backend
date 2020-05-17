@@ -8,7 +8,7 @@ function createBoard() {
     const boardName = uuid();
 
     const solution2D = randomSudoku.makePuzzle();
-    const puzzle2D = randomSudoku.pluck(solution2D, 35).puzzle;
+    const puzzle2D = randomSudoku.pluck(solution2D, 80).puzzle;
     const solution = [].concat(...solution2D);
     const puzzle = [].concat(...puzzle2D);
     let uneditable = [];
@@ -23,6 +23,7 @@ function createBoard() {
     boards[boardName] = {
         board,
         startTime,
+        finishTime: null,
         penalty: 0,
     };
     return boardName;
@@ -82,15 +83,23 @@ function getCellOfBoard(boardName, row, col) {
 
 function makeSubmission(boardName) {
     if (boardExists(boardName)) {
-        const { board, startTime } = boards[boardName];
+        const { board } = boards[boardName];
         const verdict = board.puzzle.every(
             (val, i) => val === board.solution[i]
         );
         if (verdict === false) {
             boards[boardName].penalty += 1;
+        } else {
+            boards[boardName].finishTime = new Date().getTime() / 1000;
         }
         const time = getElapsedTime(boardName);
-        return { verdict, time, penalty: boards[boardName].penalty };
+        const finishTime = getFinishTime(boardName);
+        return {
+            verdict,
+            time,
+            finishTime,
+            penalty: boards[boardName].penalty,
+        };
     } else {
         throw "Can't make submission of non-existent board.";
     }
@@ -121,6 +130,19 @@ function getPenalty(boardName) {
     }
 }
 
+function getFinishTime(boardName) {
+    if (boardExists(boardName)) {
+        const { startTime, finishTime } = boards[boardName];
+        if (finishTime === null) {
+            return -1;
+        } else {
+            return Math.round(finishTime - startTime);
+        }
+    } else {
+        throw "Can't get elapsed time of non existent board.";
+    }
+}
+
 module.exports = {
     createBoard,
     boardExists,
@@ -133,4 +155,5 @@ module.exports = {
     getUneditableCells,
     getElapsedTime,
     getPenalty,
+    getFinishTime,
 };

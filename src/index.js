@@ -104,8 +104,9 @@ app.get("/status/:boardName", (req, res) => {
             col: idx % 9,
         }));
         const time = store.getElapsedTime(boardName);
+        const finishTime = store.getFinishTime(boardName);
         const penalty = store.getPenalty(boardName);
-        res.json({ uneditable, time, penalty });
+        res.json({ uneditable, time, finishTime, penalty });
     } catch (err) {
         res.status(418).send(err);
     }
