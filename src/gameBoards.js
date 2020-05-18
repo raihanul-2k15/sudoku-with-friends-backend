@@ -1,6 +1,11 @@
 const uuid = require("uuid").v4;
 const randomSudoku = require("./randomSudoku");
 
+// number of cells that are pre filled in the board
+// update variable to change difficulty
+// good for testing purposes
+const N_PLUCK = 37;
+
 const boards = {};
 const playerBoardMap = {};
 
@@ -8,7 +13,7 @@ function createBoard() {
     const boardName = uuid();
 
     const solution2D = randomSudoku.makePuzzle();
-    const puzzle2D = randomSudoku.pluck(solution2D, 80).puzzle;
+    const puzzle2D = randomSudoku.pluck(solution2D, N_PLUCK).puzzle;
     const solution = [].concat(...solution2D);
     const puzzle = [].concat(...puzzle2D);
     let uneditable = [];
