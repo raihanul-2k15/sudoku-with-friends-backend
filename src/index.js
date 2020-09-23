@@ -42,8 +42,6 @@ function joinPlayerToBoard(player, boardName) {
 }
 
 io.on("connection", function (player) {
-    console.log("Player connected!\nID: " + player.id);
-
     player.on("createBoard", () => {
         const boardName = store.createBoard();
         joinPlayerToBoard(player, boardName);
@@ -91,9 +89,12 @@ io.on("connection", function (player) {
     });
 
     player.on("disconnect", () => {
-        console.log("Player left lmao!");
         leavePlayerFromAnyBoard(player);
     });
+});
+
+app.get("/:boardName", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
 app.get("/status/:boardName", (req, res) => {
